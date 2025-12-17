@@ -1,0 +1,26 @@
+export declare class PublicKey {
+    protected certificate: Buffer;
+    protected serialNo: string;
+    constructor(certificate: string, serialNo?: string);
+    /**
+     * 获取公钥的序列号
+     * @returns
+     */
+    getSerialNo(): string;
+    /**
+     * 获取证书内容
+     * @returns
+     */
+    getValue(): Buffer<ArrayBufferLike>;
+    /**
+     * 转为字符串
+     * @returns
+     */
+    toString(): string;
+    /**
+     * 通过内容创建实例
+     * @param content 证书内容
+     * @param serialNo 证书序列号
+     */
+    static createByCertificateContent(content: string, serialNo: string): PublicKey;
+}

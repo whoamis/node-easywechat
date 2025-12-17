@@ -1,6 +1,7 @@
 
-import { OfficialAccountConfig, MiniAppConfig, LogHandler, ServerEventType, ServerHandlerClosure, PayConfig, OpenPlatformConfig, WorkConfig, OpenWorkConfig, ChannelConfig, HttpClientFailureJudgeClosure, PaymentFailHandler, PaymentAlertHandler, PaymentPaidHandler, PaymentRefundedHandler, PaymentScannedHandler } from './Types/global';
+import { OfficialAccountConfig, MiniStoreConfig, MiniAppConfig, LogHandler, ServerEventType, ServerHandlerClosure, PayConfig, OpenPlatformConfig, WorkConfig, OpenWorkConfig, ChannelConfig, HttpClientFailureJudgeClosure, PaymentFailHandler, PaymentAlertHandler, PaymentPaidHandler, PaymentRefundedHandler, PaymentScannedHandler } from './Types/global';
 import OfficialAccount from './OfficialAccount/Application';
+import MiniStore from './MiniStore/Application';
 import MiniApp from './MiniApp/Application';
 import Pay from './Pay/Application';
 import OpenPlatform from './OpenPlatform/Application';
@@ -11,6 +12,7 @@ import CacheInterface from './Core/Contracts/CacheInterface';
 import ServerRequest from './Core/Http/ServerRequest';
 import FormData from 'form-data';
 import OfficialAccountMessage from './OfficialAccount/Message';
+import MiniStoreMessage from './MiniStore/Message';
 import WorkMessage from './Work/Message';
 import OpenPlatformMessage from './OpenPlatform/Message';
 import OpenWorkMessage from './OpenWork/Message';
@@ -21,6 +23,9 @@ import { PrivateKey } from './Core/Support/PrivateKey';
 export {
   OfficialAccount,
   OfficialAccountConfig,
+
+  MiniStore,
+  MiniStoreConfig,
 
   MiniApp,
   MiniAppConfig,
@@ -61,6 +66,13 @@ export {
  * @param config
  */
 export function defineOfficialAccountConfig(config: OfficialAccountConfig): OfficialAccountConfig {
+  return config;
+}
+/**
+ * 定义微信小店配置
+ * @param config
+ */
+export function defineMiniStoreConfig(config: MiniStoreConfig): MiniStoreConfig {
   return config;
 }
 /**
@@ -120,6 +132,14 @@ export function defineLogHandler(func: LogHandler): LogHandler {
  * @param func
  */
 export function defineOfficeAccountServerHandler(func: ServerHandlerClosure<OfficialAccountMessage>): ServerHandlerClosure<OfficialAccountMessage> {
+  return func;
+}
+
+/**
+ * 定义微信小店服务端消息处理函数
+ * @param func
+ */
+export function defineMiniStoreServerHandler(func: ServerHandlerClosure<MiniStoreMessage>): ServerHandlerClosure<MiniStoreMessage> {
   return func;
 }
 /**

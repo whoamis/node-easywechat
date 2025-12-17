@@ -1,0 +1,137 @@
+import { OpenWeWork } from 'node-socialite/dist/Providers/OpenWeWork';
+import ConfigInterface from '../Core/Contracts/ConfigInterface';
+import Encryptor from './Encryptor';
+import AccessTokenAwareClient from '../Core/HttpClient/AccessTokenAwareClient';
+import CacheMixin from '../Core/Mixins/CacheMixin';
+import ClientMixin from '../Core/Mixins/ClientMixin';
+import ConfigMixin from '../Core/Mixins/ConfigMixin';
+import HttpClientMixin from '../Core/Mixins/HttpClientMixin';
+import ServerRequestMixin from '../Core/Mixins/ServerRequestMixin';
+import { OpenWorkConfig } from '../Types/global';
+import AccountInterface from './Contracts/AccountInterface';
+import ApplicationInterface from './Contracts/ApplicationInterface';
+import Server from './Server';
+import SuiteTicketInterface from './Contracts/SuiteTicketInterface';
+import SuiteEncryptor from './SuiteEncryptor';
+import SuiteAccessToken from './SuiteAccessToken';
+import Authorization from './Authorization';
+import AuthorizerAccessToken from './AuthorizerAccessToken';
+import ProviderAccessToken from './ProviderAccessToken';
+import JsApiTicket from './JsApiTicket';
+/**
+ * 企业微信开放平台应用
+ */
+declare class Application implements ApplicationInterface {
+    constructor(config: ConfigInterface | OpenWorkConfig);
+    protected account: AccountInterface;
+    protected encryptor: Encryptor;
+    protected server: Server;
+    protected accessToken: ProviderAccessToken;
+    protected suiteEncryptor: SuiteEncryptor;
+    protected suiteAccessToken: SuiteAccessToken;
+    protected suiteTicket: SuiteTicketInterface;
+    protected authorizerAccessToken: AuthorizerAccessToken;
+    getAccount(): AccountInterface;
+    /**
+     * 设置当前账户实例
+     * @param account
+     * @returns
+     */
+    setAccount(account: AccountInterface): this;
+    getEncryptor(): Encryptor;
+    /**
+     * 设置加密机实例
+     * @param encryptor
+     * @returns
+     */
+    setEncryptor(encryptor: Encryptor): this;
+    getSuiteEncryptor(): SuiteEncryptor;
+    /**
+     * 设置授权应用的加密机实例
+     * @param suiteEncryptor
+     * @returns
+     */
+    setSuiteEncryptor(suiteEncryptor: SuiteEncryptor): this;
+    getServer(): Server;
+    /**
+     * 设置服务端实例
+     * @param server
+     * @returns
+     */
+    setServer(server: Server): this;
+    getProviderAccessToken(): ProviderAccessToken;
+    /**
+     * 设置开放平台应用的AccessToken实例
+     * @param accessToken
+     * @returns
+     */
+    setProviderAccessToken(accessToken: ProviderAccessToken): this;
+    getSuiteAccessToken(): SuiteAccessToken;
+    /**
+     * 设置授权应用的AccessToken实例
+     * @param suiteAccessToken
+     * @returns
+     */
+    setSuiteAccessToken(suiteAccessToken: SuiteAccessToken): this;
+    getSuiteTicket(): SuiteTicketInterface;
+    /**
+     * 设置授权应用的Ticket实例
+     * @param suiteTicket
+     * @returns
+     */
+    setSuiteTicket(suiteTicket: SuiteTicketInterface): this;
+    /**
+     * 获取企业授权信息
+     * @see https://developer.work.weixin.qq.com/document/10975#获取企业授权信息
+     * @param corpId 授权方corpid
+     * @param permanentCode 永久授权码，通过get_permanent_code获取
+     * @param suiteAccessToken
+     * @returns
+     */
+    getAuthorization(corpId: string, permanentCode: string, suiteAccessToken?: SuiteAccessToken): Promise<Authorization>;
+    /**
+     * 获取预授权码
+     * @see https://developer.work.weixin.qq.com/document/10975#获取预授权码
+     * @param suiteAccessToken
+     * @returns
+     */
+    createPreAuthorizationCode(suiteAccessToken?: SuiteAccessToken): Promise<import("../Types/global").WeixinResponse>;
+    /**
+     * 生成授权页地址
+     * @see https://developer.work.weixin.qq.com/document/path/90597#从服务商网站发起
+     * @param callbackUrl 授权后的回调地址
+     * @param pre_auth_code 预授权码，不传则系统自动调用 createPreAuthorizationCode 获取
+     * @param state
+     * @returns
+     */
+    createPreAuthorizationUrl(callbackUrl: string, pre_auth_code?: string, state?: string): Promise<string>;
+    /**
+     * 获取企业永久授权码
+     * @see https://developer.work.weixin.qq.com/document/path/90603
+     * @param authCode 临时授权码
+     * @param suiteAccessToken
+     * @returns
+     */
+    getPermanentCode(authCode: string, suiteAccessToken?: SuiteAccessToken): Promise<import("../Types/global").WeixinResponse>;
+    /**
+     * 获取企业授权令牌
+     * @param corpId
+     * @param permanentCode
+     * @param suiteAccessToken
+     * @returns
+     */
+    getAuthorizerAccessToken(corpId: string, permanentCode: string, suiteAccessToken?: SuiteAccessToken): Promise<AuthorizerAccessToken>;
+    createClient(): AccessTokenAwareClient;
+    getAuthorizerClient(corpId: string, permanentCode: string, suiteAccessToken?: SuiteAccessToken): Promise<AccessTokenAwareClient>;
+    getJsApiTicket(corpId: string, permanentCode: string, suiteAccessToken?: SuiteAccessToken): Promise<JsApiTicket>;
+    getOAuth(suiteId: string, suiteAccessToken?: SuiteAccessToken): Promise<OpenWeWork>;
+    getCorpOAuth(corpId: string, suiteAccessToken?: SuiteAccessToken): Promise<OpenWeWork>;
+    /**
+     * 获取请求默认配置
+     * @returns
+     */
+    protected getHttpClientDefaultOptions(): Record<string, any>;
+}
+interface Application extends ConfigMixin, CacheMixin, ClientMixin, ServerRequestMixin, HttpClientMixin {
+}
+export = Application;

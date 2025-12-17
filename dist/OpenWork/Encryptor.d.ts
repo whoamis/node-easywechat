@@ -1,0 +1,8 @@
+import BaseEncryptor from '../Core/Encryptor';
+declare class Encryptor extends BaseEncryptor {
+    protected corpId: string;
+    protected token: string;
+    protected aesKey: string | Buffer;
+    constructor(corpId?: string, token?: string, aesKey?: string | Buffer);
+}
+export = Encryptor;
