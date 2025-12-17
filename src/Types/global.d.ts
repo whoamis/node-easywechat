@@ -1,8 +1,10 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { BaseProvider } from 'node-socialite';
 import OfficialAccountApplicationInterface from '../OfficialAccount/Contracts/ApplicationInterface';
+import MiniStoreApplicationInterface from '../MiniStore/Contracts/ApplicationInterface';
 import WorkApplicationInterface from '../Work/Contracts/ApplicationInterface';
 import Message from '../Core/Message';
+import MiniStoreMessage from '../MiniStore/Message';
 import OfficialAccountMessage from '../OfficialAccount/Message';
 import PayMessage from '../Pay/Message';
 import WorkMessage from '../Work/Message';
@@ -143,6 +145,39 @@ export interface OfficialAccountConfig extends BaseConfig {
    */
   use_stable_access_token?: boolean;
 }
+
+
+/**
+ * 微信小店配置
+ */
+export interface MiniStoreConfig extends BaseConfig {
+  /**
+   * 微信小店 app_id
+   */
+  app_id?: string;
+
+  /**
+   * 微信小店 secret
+   */
+  secret?: string;
+
+  /**
+   * 服务端接口验证 token
+   */
+  token?: string;
+
+  /**
+   * 服务端消息加解密密钥 aes_key
+   */
+  aes_key?: string;
+
+  /**
+   * 是否使用稳定版接口调用凭据，默认：false
+   * @see https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-access-token/getStableAccessToken.html
+   */
+  use_stable_access_token?: boolean;
+}
+
 
 /**
  * 小程序配置
@@ -306,6 +341,14 @@ export interface OpenWorkConfig extends BaseConfig {
  */
 export type OfficialAccountOAuthFactory = (app: OfficialAccountApplicationInterface) => BaseProvider;
 
+
+/**
+ * 微信小店OAuth工厂方法
+ * @param app 公众号应用实例
+ * @returns OAuth服务供应商实例
+ */
+export type MiniStoreOAuthFactory = (app: MiniStoreApplicationInterface) => BaseProvider;
+
 /**
  * 企业微信OAuth工厂方法
  * @param app 企业微信应用实例
@@ -336,7 +379,7 @@ export type ServerEventType = 'subscribe' | 'unsubscribe' | 'SCAN' | 'LOCATION' 
  * @param message 微信信息
  * @param next 下一个消息处理器
  */
-export type ServerHandlerClosure<T = Message> = (message: T extends OfficialAccountMessage | PayMessage | WorkMessage | OpenPlatformMessage | OpenWorkMessage ? T : Message, next?: ServerHandlerClosure<T>) => any;
+export type ServerHandlerClosure<T = Message> = (message: T extends OfficialAccountMessage | PayMessage | WorkMessage | OpenPlatformMessage | OpenWorkMessage | MiniStoreMessage ? T : Message, next?: ServerHandlerClosure<T>) => any;
 
 /**
  * HttpClient错误判定回调
